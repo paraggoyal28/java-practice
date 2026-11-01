@@ -1,0 +1,101 @@
+Questions:
+
+Q1. We are iterating through a HashMap using a standard for loop or Iterator. 
+Inside the loop, we attempt to add or remove element from same map.
+What exception will be thrown, why does it happen under hood, and how can we safely modify a map
+during iteration ? 
+
+ConcurrentModificationException will be thrown. 
+Safely modify a map using Iterators and iterator.remove() method
+or using concurrentHashMap
+Concurrent Modification Exception occurs 
+
+Why does it occur:
+Under the Hood: modCount
+Map maintains a structural modification counter called modCount.
+When we create an iterator, it copies this value into an internal variable named expectedModCount.
+On every .next() call, it checks if modCount == expectedModCount.
+If we mutate the map, directly via map.put() or map.remove(), modCount increments.
+causing the next iterator check to fail and throw the exception.
+
+iterator.remove() check
+Method is safe because it internally updated expectedModCount = modCount, 
+right after deleting the element, keeping them in sync.
+
+Alternative Scenario: Use ConcurrentHashMap
+
+Q2. Internal working of HashMap and difference between HashMap and HashSet.
+
+HashMap uses hashcode() to determine the bucket where the object will be place.
+Uses equals() to check if two objects are equal in the same bucket.
+
+
+Unchecked Exception Vs Checked Exception
+
+// Use for programming errors
+class MyRunTimeException extends RuntimeException {
+   public MyRunTimeException(String message) {
+	super(message);
+   }	
+}
+
+// Use for recoverable scenarios outside program's direct control
+class MyCustomException extends Exception {
+   public MyCustomException(String message) {
+	super(message);
+   }
+}
+
+Object monitors
+Monitors 
+In Java, every single object has an implicit, internal lock associated with it, called a Monitor (or intrinsic lock).
+When a thread enters a synchronized instance method, it automatically acquires the monitor lock of that specific object instance (this).
+If another thread tries to invoke any synchronized method on the same object instance,
+it will be blocked and placed into a waiting queue until the first thread releases the monitor
+(by exiting the method or throwing an exception).
+
+Static Synchronized Method:
+If method is static, thread acquires the monitor lock of the Class object (e.g MyClass.class),
+not an individual instance.
+
+Executor Service
+How it works: Decouples task submission from 
+execution using a shared blocking queue (BlockingQueue) and a pool of worker threads.
+We submit Runnable or Callable tasks, and worker threads pull them sequentially.
+
+Best Used For: Independent, Heterogeneous tasks
+such as handling incoming HTTP Requests, 
+executing asynchronous background jobs, 
+processing independent db operations 
+(like handling concurrent requests in enterprises microservices)
+
+Limitation:
+If a task spawns sub-tasks and blocks waiting for them using standard Future.get(),
+it can lead to thread starvation or
+thread pool exhaustion if pool size is fixed and recursion depth is high.
+
+ForkJoinFramework (Work-Stealing Mode):
+
+How it works: Specifically designed for 
+divide-conqueor algorithms.
+Uses specialized ForkJoinPool where every worker thread maintains 
+its own Double ended (deque) of tasks.
+
+Work-Stealing Algorithms: If a worker thread finishes its own tasks,
+it can "steal" tasks from the tail of another busy thread's deque, maximizing CPU utilization.
+
+Best Use Case: Recursive, deeply nested data structures, tree/graph algorithms,
+or large-scale data partitioning (ideal for recursively 
+
+List<String> names = List.of("Alice", "Bob", "Charlie")
+List<String> result = names.stream()
+			   .filter(s -> s.length() < 3)
+			  
+
+
+ 
+
+
+
+
+

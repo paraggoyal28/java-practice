@@ -1,0 +1,81 @@
+Q. What is the difference between BeanFactory and ApplicationContext ? 
+
+BeanFactory: Root interface for accessing a Spring container. Provides basic dependency injection support using a lazy loading approach 
+
+ApplicationContext: Sub-interface of BeanFactory. A
+
+Q. Explain Spring Bean Lifecycle. 
+
+Instantiation
+Spring injects values and dependencies
+Bean Name/Bean Factory Awareness
+Post Processing
+Initialization
+Post Processing (After initialization)
+Ready For Use
+Destruction:
+
+Q. Why is Constructor injection preferred over Field injection ? 
+Immutability
+Dependencies can be marked as final, ensuring they don't change throughout bean's lifecycle.
+Null safety
+Component cannot be constructed or instantiated without its mandatory dependencies.
+Easier Unit Testing
+We can instantiate the class using a new Class(mockDependency) in plain unit tests without spinning up a heavy Spring Context.
+Circular Dependency Detection
+Constructor Injection triggers a BeanCurrentlyInCreationException at startup (Fail-fast), whereas field/setter injection might defer it to runtime.
+
+
+Spring Boot & Internals
+
+Q. What does the @SpringBootApplication annotation actually do under the hood ? 
+Meta-annotation comprising three core annotations:
+1. @SpringBootConfiguration
+2. @EnableAutoConfiguration
+3. @ComponentScan
+
+Q. How does Spring Boot Auto-Configuration work internally ? 
+Spring Boot checks the classpath for available libraries using internal condition evaluators.
+Parses configuration files - specifically 
+META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
+(or older spring.factories) 
+
+Q. Explain Spring Bean Scopes. Are Singleton beans thread-safe ? 
+Scopes: singleton (default-one instance per container)
+prototype (new instance every time requested) 
+request (one per HTTP request)
+session (one per HTTP session), and application/websocket.
+
+Q. Difference between @Controller and @RestController ? 
+@Controller: Used for traditional Spring MVC apps where methods typically return view names (like JSP or Thymeleaf templates).
+
+@RestController: A specialized version of @Controller annotated with @ResponseBody. Every method automatically 
+serializes return objects directly into JSON or XML and writes them straight into HTTP response body.
+
+Q. How does @Transactional work, what is the most common pitfall ? 
+How it works: 
+Spring creates a dynamic proxy around the annotated bean. When a traditional method is called, the proxy intercepts the call, asks the 
+PlatformTransactionManager to open a database connection, starts a transaction and commits/rollbacks based on runtime execution.
+
+The "Self-Invocation Pitfall: If a method within the same class calls another @Transactional method internally (this.someMethod())
+the proxy is bypassed entirely, and no transaction is created.
+Fix: Inject a self-reference of the bean or refactor the method into a separate service class.
+
+
+Q. How do Java streams and Functional interfaces tie into modern Spring development ? 
+1. Modern Spring frameworks leverage functional interfaces (like Function, Predicate, Consumer) extensively in APIs like
+Spring Cloud Stream.
+Interview Trap: Avoid overusing complex streams with heavy side effects in critical database paths;
+standard loops are often more readable and easier to debug when dealing with heavy enterprise 
+exception handling.
+
+Q. Add project Lombok
+
+<dependency>
+  <groupId>org.projectlombok</groupId>
+  <artifactId>lombok</artifactId>
+  <optional>true</optional>
+</dependency>
+
+
+ 

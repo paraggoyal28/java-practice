@@ -1,0 +1,41 @@
+
+/* Suppose the downstream service is taking maximum requests per window as 80 and the window size is 5 seconds. And we have to allocate maximum requests 
+to enterprise, and free and premium can get somewhat less requests. So how will you allocate the requests between them ? And first we can think static 
+and then we can implement towards dynamic approach like real-time allocation */
+
+This is a classical systems design and capacity planning problem. We have a strict global bottleneck (the downstream service can handle 80 requests per 5 second window), and we
+need to slice that pie intelligently among three tiers (ENTERPRISE, PREMIUM, FREE) where Enterprise
+has the highest priority.
+
+Let's break down into two phases: Static Allocation and Dynamic Real-Time Allocation
+
+Phase 1: Static Allocation (Fixed Partitioning) 
+In a static approach, we pre-divide the 80 global requests into fixed buckets per 5-second window based on expected traffic volume and business value.
+
+Proposed Static Split:
+- Enterprise: 50 requests (62.5% of total capacity)
+- Premium: 20 requests (25% of total capacity) 
+- Free: 10 requests (12.5% of total capacity)
+- Total = 80 requests / 5 seconds
+
+Pros and Cons of Static Allocation:
+1. Pros: Extremely simple to implement, predictable, and guarantees that a surge of Free users cannot starve Enterprises users.
+2. Cons: Inefficient. If Free users are inactive (during a specific 5 second window, their 10 allocated spots are wasted, even if 
+Enterprise users are experiencing a massive traffic spike and desperately need them. 
+
+Phase 2: Dynamic / Real-Time Allocation Strategy
+To fix the wastefulness of static allocation, we move to a Guaranteed Minimum + Dynamic Borrowing Pool model. 
+
+How the Dynamic Approach Works:
+1. Guaranteed Baselines: Every tier gets a small guaranteed minimum slot so they are never completely locked out:
+   Enterprise: 30 guaranteed slots
+   Premimum: 10 guaranteed slots
+   Free: 5 guaranteed slots
+
+2. First-come, First-Served for Shared Pool: When a request comes in, it checks its tier's baseline. If exceeded, it checks if there
+are remaining tokens in the Global Shared Pool. (up to 80 ceiling).
+
+3. Priority-Based Reclaiming: If the global pool is congested, lower tiers (Free/Premium) are throttled first, while Enterprise can consume the remaining 
+balance of the entire 80-request limit.
+
+

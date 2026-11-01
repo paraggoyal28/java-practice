@@ -1,0 +1,11 @@
+@EnableAutoConfiguration (tell Spring Boot to start configuring beans based on classpath libraries)
+@Configuration (marks the class as a source of bean definition, etc.)
+@ComponentScan (scans for our controller, services, etc. starting from our current package down)
+
+
+Constructor Injection preferred over Field Injection
+Catches Missing Dependencies Early: If a required dependency is missing, Constructor injection throws an error right when the application starts up. Field inject might let the app 
+start, only to crash with a NullPointerException later when a user hits a specific endpoint.
+
+Java Core: 
+
