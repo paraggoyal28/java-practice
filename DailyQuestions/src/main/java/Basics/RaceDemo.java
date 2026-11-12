@@ -1,7 +1,5 @@
 package Basics;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 class Counter {
     public int count = 0;
 
@@ -12,7 +10,7 @@ class Counter {
 
 public class RaceDemo {
     public static void main(String[] args) {
-        Counter c = new Counter();
+        CounterNonAtomic c = new CounterNonAtomic();
 
         Thread t1 = new Thread(() -> {
             for (int i = 0; i < 10_000; ++i) {
