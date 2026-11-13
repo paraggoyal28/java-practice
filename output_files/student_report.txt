@@ -1,0 +1,5 @@
+----STUDENT GRADE REPORT-----
+Name: Alice      | Avg: 84.33 | Status: PASS
+Name: Bob        | Avg: 50.00 | Status: FAIL
+Name: Charlie    | Avg: 91.67 | Status: PASS
+Name: Diana      | Avg: 69.00 | Status: PASS

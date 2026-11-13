@@ -1,0 +1,5 @@
+[INFO] 2026-06-01 10:00:01 - Server started successfully.
+[DEBUG] 2026-06-01 10:05:12 - Loading configuration properties.
+[ERROR] 2026-06-01 10:12:45 - Database connection timeout!
+[INFO] 2026-06-01 10:15:00 - User 'admin' logged in.
+[ERROR] 2026-06-01 10:20:33 - NullPointerException encountered in PaymentService
