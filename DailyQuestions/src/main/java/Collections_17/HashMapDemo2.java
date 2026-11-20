@@ -1,0 +1,33 @@
+package Collections_17;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+public class HashMapDemo2 {
+	public static void main(String[] args) {
+		HashMap<String, Double> hm = new HashMap<>();
+
+		hm.put("John Doe", 3434.34);
+		hm.put("Tom Smith", 123.22);
+		hm.put("Jane Baker", 1272.00);
+		hm.put("Tod Hall", 99.22);
+		hm.put("Ralph Smith", -192.08);
+
+		// Get the set of the entries
+		Set<Map.Entry<String, Double>> set = hm.entrySet();
+
+		// Display the set
+		for (Map.Entry<String, Double> me: set) {
+			System.out.print(me.getKey() + ": ");
+			System.out.println(me.getValue());
+		}
+
+		System.out.println();
+
+		// Deposit 1000 into John Doe's account
+		hm.compute("Parag Doe", (user, b) -> b == null ? 1000: b + 1000);
+
+		System.out.println("Parag Doe's new balance: " + hm.get("Parag Doe"));
+	}
+}
